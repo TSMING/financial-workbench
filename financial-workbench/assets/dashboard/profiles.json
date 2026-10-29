@@ -1,0 +1,116 @@
+{
+  "CN": {
+    "name": "中国大陆",
+    "currency": "CNY",
+    "reviewedOn": "2026-10-29",
+    "accounting": "企业会计准则（CAS）及财政部准则解释／配套规定",
+    "securities": "《证券法》、证监会信息披露规则及适用交易所规则",
+    "auditing": "中国注册会计师审计准则、质量管理及职业道德要求",
+    "disclosures": "证监会、上交所／深交所披露文件、招股说明书及定期报告",
+    "scopeNote": "按企业类型、上市地点、报告期间及交易日期核对版本；目录中的旧发布日期不等于现行适用版本。",
+    "searchTerms": {
+      "accounting": ["企业会计准则", "财政部 会计准则 解释", "企业合并 公允价值 财务报表列报"],
+      "securities": ["上市公司 信息披露 管理办法", "招股说明书 重大资产重组", "证券法 上市规则"],
+      "auditing": ["中国注册会计师审计准则", "审计证据 重大错报 关键审计事项", "会计师事务所 质量管理"]
+    },
+    "sources": [
+      {"category": "accounting", "title": "财政部会计司：企业会计准则目录", "url": "https://kjs.mof.gov.cn/zt/kjzzss/kuaijizhunzeshishi/", "domain": "mof.gov.cn", "authority": "standard-setter", "accessNote": "目录已读；须另外检索最新修订、解释和适用报告期。"},
+      {"category": "accounting", "title": "财政部会计司：政策发布", "url": "https://kjs.mof.gov.cn/zhengcefabu/", "domain": "mof.gov.cn", "authority": "standard-setter", "accessNote": "用于查找后续修订，不以历史准则目录替代版本核查。"},
+      {"category": "securities", "title": "证监会：上市公司信息披露管理办法（第226号令）", "url": "https://www.csrc.gov.cn/shanghai/c105565/c7549909/content.shtml", "domain": "csrc.gov.cn", "authority": "regulator-rule", "accessNote": "官方发布页已读；具体条文见所附 PDF，并核对后续修改。"},
+      {"category": "auditing", "title": "财政部：中国注册会计师鉴证业务基本准则等11项准则", "url": "https://kjs.mof.gov.cn/zhengcefabu/202201/t20220107_3781413.htm", "domain": "mof.gov.cn", "authority": "standard-setter", "accessNote": "发布页已读；该文件不覆盖所有准则，需按审计议题检索其他准则及后续修订。"},
+      {"category": "disclosures", "title": "上交所：上市公司公告", "url": "https://www.sse.com.cn/disclosure/listedinfo/announcement/", "domain": "sse.com.cn", "authority": "exchange-disclosure", "accessNote": "披露入口已读；公告内容由上市公司提供，不属于会计准则。"},
+      {"category": "disclosures", "title": "深交所：上市公司公告", "url": "https://www.szse.cn/disclosure/listed/notice/index.html", "domain": "szse.cn", "authority": "exchange-disclosure", "accessNote": "本次读取超时；保留为待访问的官方披露入口。"}
+    ]
+  },
+  "AU": {
+    "name": "澳洲",
+    "currency": "AUD",
+    "reviewedOn": "2026-10-29",
+    "accounting": "AASB Accounting Standards 及适用分层披露要求",
+    "securities": "Corporations Act、ASIC 规则与适用 ASX Listing Rules",
+    "auditing": "AUASB 的 ASA／ASQM 及适用审阅、鉴证准则",
+    "disclosures": "ASX 公告、招股文件及 ASIC 公司披露",
+    "scopeNote": "先确定报告主体、Tier、报告期、ASX 上市类别与澳大利亚联系；AASB 与 IFRS 不能只按名称互换。",
+    "searchTerms": {
+      "accounting": ["AASB accounting standards", "business combinations fair value financial statements", "AASB reporting period amendments"],
+      "securities": ["Corporations Act ASIC disclosure", "ASX Listing Rules continuous disclosure", "prospectus acquisition significant transaction"],
+      "auditing": ["AUASB ASA auditing standards", "audit evidence material misstatement going concern", "ASQM quality management"]
+    },
+    "sources": [
+      {"category": "accounting", "title": "AASB：按报告期选择会计准则", "url": "https://standards.aasb.gov.au/accounting-standards", "domain": "aasb.gov.au", "authority": "standard-setter", "accessNote": "目录已读；用 Reporting from / to 与 All Versions 核对版本及修订。"},
+      {"category": "securities", "title": "ASIC：财务报告与审计监管", "url": "https://www.asic.gov.au/regulatory-resources/financial-reporting-and-audit", "domain": "asic.gov.au", "authority": "regulator-guidance", "accessNote": "监管目录已读；ASIC 指引与法律、准则条文分别记录。"},
+      {"category": "securities", "title": "ASX：Listing Rules 及 Guidance Notes", "url": "https://www.asx.com.au/about/regulation/rules-guidance-notes-and-waivers/asx-listing-rules-guidance-notes-and-waivers", "domain": "asx.com.au", "authority": "exchange-rule", "accessNote": "规则目录已读；具体规则、Guidance Notes 及最近修订分别核对。"},
+      {"category": "auditing", "title": "AUASB：Auditing and Assurance Standards Portal", "url": "https://standards.auasb.gov.au/", "domain": "auasb.gov.au", "authority": "standard-setter", "accessNote": "目录已读；按审计期间与业务种类选择生效准则。"},
+      {"category": "disclosures", "title": "ASX：公司公告检索", "url": "https://www.asx.com.au/markets/trade-our-cash-market/announcements", "domain": "asx.com.au", "authority": "exchange-disclosure", "accessNote": "公告检索入口已读；公司公告属于事实证据，不代替规则正文。"}
+    ]
+  },
+  "HK": {
+    "name": "香港",
+    "currency": "HKD",
+    "reviewedOn": "2026-10-29",
+    "accounting": "HKFRS／HKAS；另核对上市规则接受的会计编制基础",
+    "securities": "Securities and Futures Ordinance、SFC 规则及 HKEX 主板／GEM Listing Rules",
+    "auditing": "HKSA／HKQM 及适用 HKICPA 审阅和投资通函报告准则",
+    "disclosures": "HKEXnews 公告、上市文件、年报与通函",
+    "scopeNote": "先确定发行人注册地、上市板块和会计基础。HKFRS、IASB IFRS 与其他获接受基础不能无条件视为相同。",
+    "searchTerms": {
+      "accounting": ["HKFRS HKAS financial reporting", "business combinations fair value", "HKICPA effective date amendments"],
+      "securities": ["HKEX Listing Rules disclosure notifiable transactions", "SFC inside information takeover", "prospectus financial information"],
+      "auditing": ["HKSA HKQM auditing assurance", "audit evidence key audit matters", "HKSIR investment circular reporting"]
+    },
+    "sources": [
+      {"category": "accounting", "title": "HKICPA：Financial Reporting Standards", "url": "https://www.hkicpa.org.hk/en/Standards-setting/Standards/Members-Handbook-and-Due-Process/Due-Process/Financial-reporting", "domain": "hkicpa.org.hk", "authority": "standard-setter", "accessNote": "标准体系介绍页已读；具体 Handbook/PDF 的可访问性和生效版本逐次核查，不能由目录推断已读全文。"},
+      {"category": "securities", "title": "HKEX：Listing Rules and Guidance Search", "url": "https://www.hkex.com.hk/Listing/Listing-Rules-and-Guidance-Search?sc_lang=en", "domain": "hkex.com.hk", "authority": "exchange-rule", "accessNote": "官方检索页已读；区分规则正文、指引和历史归档。en-rules.hkex.com.hk 本次访问超时。"},
+      {"category": "securities", "title": "SFC：Codes and Guidelines", "url": "https://www.sfc.hk/en/Rules-and-standards/Codes-and-guidelines", "domain": "sfc.hk", "authority": "regulator-guidance", "accessNote": "目录已读；SFC codes/guidelines 并非一概属于附属法例，需另核对对应法律和适用对象。"},
+      {"category": "auditing", "title": "HKICPA：Auditing and Assurance Standards", "url": "https://www.hkicpa.org.hk/en/Standards-setting/Standards/Members-Handbook-and-Due-Process/Due-Process/Auditing-Assurance", "domain": "hkicpa.org.hk", "authority": "standard-setter", "accessNote": "标准体系介绍页已读；HKSA、HKQM、HKSIR 等按实际委托分别选择，正文访问及生效期逐项核对。"},
+      {"category": "disclosures", "title": "HKEXnews：上市公司披露检索", "url": "https://www.hkexnews.hk/index.htm", "domain": "hkexnews.hk", "authority": "exchange-disclosure", "accessNote": "官方入口已读；按上市公司、文档类别及日期检索公告、通函和招股文件。"}
+    ]
+  },
+  "US": {
+    "name": "美国",
+    "currency": "USD",
+    "reviewedOn": "2026-10-29",
+    "accounting": "US GAAP／FASB ASC；ASU 修订、生效期及过渡另核对",
+    "securities": "SEC Regulation S-X／S-K、Securities Act／Exchange Act 及适用申报表",
+    "auditing": "发行人／broker-dealer 适用 PCAOB；非发行人另核对 AICPA US GAAS",
+    "disclosures": "SEC EDGAR：S-1／F-1、10-K／10-Q／8-K、20-F／6-K 等",
+    "scopeNote": "先确认 domestic issuer／FPI、PBE 身份、申报表及报告期；FPI 的 IASB IFRS 选项及其审计要求需另核对，不能由地区选项直接决定。",
+    "searchTerms": {
+      "accounting": ["FASB ASC accounting standards", "business combinations fair value contingent consideration", "Accounting Standards Update effective date"],
+      "securities": ["SEC Regulation S-X S-K disclosure", "S-1 Form 8-K acquisition pro forma", "SEC accounting financial reporting"],
+      "auditing": ["PCAOB auditing standards", "audit evidence material misstatement internal control", "PCAOB applicable audit period"]
+    },
+    "sources": [
+      {"category": "accounting", "title": "FASB：Accounting Standards Codification", "url": "https://asc.fasb.org/", "domain": "fasb.org", "authority": "standard-setter", "accessNote": "官方入口可定位，但本次浏览未取得可读段落正文；ASC Topic 标签只是检索线索，不能声称已核对条文。"},
+      {"category": "securities", "title": "SEC：Rules, Regulations and Schedules", "url": "https://www.sec.gov/files/divisions/corpfin/ecfrlinks.shtml", "domain": "sec.gov", "authority": "regulator-directory", "accessNote": "目录已读；进入 eCFR、具体申报表和正式发布文本核对适用条文。"},
+      {"category": "securities", "title": "Regulation S-X：17 CFR Part 210", "url": "https://www.ecfr.gov/current/title-17/chapter-II/part-210", "domain": "ecfr.gov", "authority": "regulation", "accessNote": "财务报表、收购业务财报与备考信息；使用交易日／报告期对应版本。"},
+      {"category": "securities", "title": "Regulation S-K：17 CFR Part 229", "url": "https://www.ecfr.gov/current/title-17/chapter-II/part-229", "domain": "ecfr.gov", "authority": "regulation", "accessNote": "业务、风险、MD&A 等披露；不能把工作人员解释当作 Commission 正式规则。"},
+      {"category": "auditing", "title": "PCAOB：Auditing Standards", "url": "https://pcaobus.org/oversight/standards/auditing-standards", "domain": "pcaobus.org", "authority": "audit-regulator-standard", "accessNote": "准则目录已读；按审计期间选择对应版本，PCAOB 不能自动套用于所有美国非发行人审计。"},
+      {"category": "disclosures", "title": "SEC EDGAR：Full Text Search", "url": "https://www.sec.gov/edgar/search/", "domain": "sec.gov", "authority": "regulator-disclosure", "accessNote": "官方检索入口已读；S-1 是申报表类型，不是单一文件扩展名，可为 HTML、TXT、PDF 及附件。"}
+    ]
+  },
+  "EU": {
+    "name": "欧盟",
+    "currency": "EUR",
+    "reviewedOn": "2026-10-29",
+    "accounting": "EU-endorsed IFRS／IAS 及适用成员国 Accounting Directive 转置规则",
+    "securities": "Prospectus Regulation、Transparency Directive、MAR 及成员国实施／主管机关要求",
+    "auditing": "Statutory Audit Directive 2006/43/EC、Regulation 537/2014 及成员国审计规则",
+    "disclosures": "ESMA 招股书／发行人披露入口、成员国 OAM 与公司登记册",
+    "scopeNote": "欧盟不是单一会计／审计司法辖区：需补充成员国、上市市场、PIE 身份与发行人注册地。EU-endorsed IFRS 不直接等同 IASB 所有已发布准则，审计准则采纳及监管依成员国而异。",
+    "searchTerms": {
+      "accounting": ["EU endorsed IFRS financial reporting", "IAS Regulation 1606/2002 Accounting Directive", "business combinations fair value endorsement"],
+      "securities": ["ESMA Prospectus Regulation Transparency Directive", "Market Abuse Regulation issuer disclosure", "prospectus financial statements"],
+      "auditing": ["statutory audit Directive 2006/43/EC", "Regulation 537/2014 public interest entities", "member state auditing standards"]
+    },
+    "sources": [
+      {"category": "accounting", "title": "European Commission：Financial Reporting", "url": "https://finance.ec.europa.eu/financial-markets/company-reporting-and-auditing/company-reporting/financial-reporting_en", "domain": "ec.europa.eu", "authority": "commission-directory", "accessNote": "官方介绍页已读；IAS Regulation、Accounting Directive 和 EU endorsement 按主体及期间另核对。"},
+      {"category": "accounting", "title": "IFRS Foundation：Standards Navigator", "url": "https://www.ifrs.org/issued-standards/list-of-standards/", "domain": "ifrs.org", "authority": "standard-setter", "accessNote": "目录已读；基本正文访问可能要求注册，增强／历史内容可能受订阅限制。IASB 原文仍需与 EU endorsement 比较，不嵌入或再分发准则全文。"},
+      {"category": "securities", "title": "ESMA：Interactive Single Rulebook", "url": "https://www.esma.europa.eu/publications-and-data/interactive-single-rulebook", "domain": "esma.europa.eu", "authority": "regulator-documentation", "accessNote": "官方目录已读；ESMA 明确其为文件检索工具，正式法律文本以 EU Official Journal 为准。"},
+      {"category": "auditing", "title": "European Commission：Statutory Auditing", "url": "https://finance.ec.europa.eu/financial-markets/company-reporting-and-auditing/auditing-companies-financial-statements_en", "domain": "ec.europa.eu", "authority": "commission-directory", "accessNote": "官方介绍页已读；核对成员国转置、PIE 范围及主管机关，不自动假设全部成员国使用完全相同的 ISA 版本。"},
+      {"category": "auditing", "title": "EUR-Lex：Statutory Audit Directive 2006/43/EC", "url": "https://eur-lex.europa.eu/eli/dir/2006/43/oj/eng", "domain": "eur-lex.europa.eu", "authority": "legislation", "accessNote": "本次正文读取遇到 JavaScript 验证；该链接为原始 Official Journal 文本，个案还需选择适用合并版本与成员国转置。"},
+      {"category": "auditing", "title": "EUR-Lex：Audit Regulation 537/2014", "url": "https://eur-lex.europa.eu/eli/reg/2014/537/oj/eng", "domain": "eur-lex.europa.eu", "authority": "legislation", "accessNote": "本次正文读取遇到 JavaScript 验证；PIE 适用性、修订和日期须另核对。"},
+      {"category": "disclosures", "title": "ESMA：Databases and Registers", "url": "https://www.esma.europa.eu/publications-and-data/databases-and-registers", "domain": "esma.europa.eu", "authority": "regulator-disclosure-directory", "accessNote": "本次返回 403；保留官方入口，并结合成员国 OAM、主管机关和公司登记册检索。"}
+    ]
+  }
+}

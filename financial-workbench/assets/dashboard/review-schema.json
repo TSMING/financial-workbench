@@ -1,0 +1,49 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["summary", "findings", "sources", "journalEntries", "limitations"],
+  "properties": {
+    "summary": {"type": "string"},
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["category", "status", "title", "quote", "analysis", "ruleReference", "applicableVersion", "sourceUrls", "suggestedWording"],
+        "properties": {
+          "category": {"type": "string", "enum": ["accounting", "securities", "auditing", "narrative"]},
+          "status": {"type": "string", "enum": ["supported", "conflict", "pending"]},
+          "title": {"type": "string"}, "quote": {"type": "string"}, "analysis": {"type": "string"},
+          "ruleReference": {"type": "string"}, "applicableVersion": {"type": "string"},
+          "sourceUrls": {"type": "array", "items": {"type": "string"}},
+          "suggestedWording": {"type": "string"}
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["title", "url", "category", "authority", "accessStatus", "ruleReference", "effectiveDate", "relevantExcerpt"],
+        "properties": {
+          "title": {"type": "string"}, "url": {"type": "string"},
+          "category": {"type": "string", "enum": ["accounting", "securities", "auditing", "disclosures"]},
+          "authority": {"type": "string"},
+          "accessStatus": {"type": "string", "enum": ["read", "index", "blocked", "search-only"]},
+          "ruleReference": {"type": "string"}, "effectiveDate": {"type": "string"}, "relevantExcerpt": {"type": "string"}
+        }
+      }
+    },
+    "journalEntries": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["account", "debit", "credit", "currency", "quote", "note"],
+        "properties": {
+          "account": {"type": "string"}, "debit": {"type": ["number", "null"]}, "credit": {"type": ["number", "null"]},
+          "currency": {"type": "string"}, "quote": {"type": "string"}, "note": {"type": "string"}
+        }
+      }
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  }
+}

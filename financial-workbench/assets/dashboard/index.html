@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FINSKILL · 多地区财务审阅工作台</title>
+  <link rel="stylesheet" href="/dashboard.css">
+  <script src="/dashboard.js" defer></script>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand"><div class="mark">FIN</div><div><h1>多地区财务审阅工作台</h1><div class="sub">原文证据 · Journal Entry · 联网法规与文字审查</div></div></div>
+    <div class="toolbar"><span id="connection" class="connection" role="status">正在连接本机服务…</span><button class="pill" id="clearBtn">清空本次</button><button class="pill" id="exportBtn">导出审阅包</button><button class="primary" id="startBtn" disabled>开始审查</button><button class="pill" id="cancelBtn" hidden>取消审查</button></div>
+  </header>
+  <div class="run-banner" id="runBanner" role="status" aria-live="polite">导入文件或粘贴原文，然后点击“开始审查”。</div>
+  <main class="workspace">
+    <section class="panel">
+      <div class="panel-head"><div><div class="panel-title">文章与公示文件</div><div class="panel-tools">保留原文，可同时导入多个文件</div></div></div>
+      <div class="body">
+        <div class="control-grid">
+          <label>文件格式<select id="fileFormat"><option value="all">全部支持格式</option><option value="pdf">PDF 文档</option><option value="word">Word 文档</option><option value="excel">Excel / CSV</option><option value="disclosure">公示文件 / HTML / TXT</option></select></label>
+          <label>资料类型<select id="documentType"><option value="general">通用资料</option><option value="S-1">美国 S-1 / S-1/A</option><option value="F-1">美国 F-1 / F-1/A</option><option value="periodic">年报 / 季报 / 10-K / 10-Q / 20-F</option><option value="announcement">并购公告 / 8-K / 通函</option><option value="prospectus">其他地区招股书 / 上市文件</option><option value="registry">工商 / 企业登记公示信息</option><option value="ledger">合同 / 总账 / 试算平衡表</option></select></label>
+        </div>
+        <label class="upload-zone" for="files"><strong>选择文件导入</strong><span>PDF、DOCX、XLSX、XLS、CSV、HTML、XML、TXT 等</span><input type="file" id="files" multiple accept=".pdf,.docx,.xlsx,.xlsm,.xls,.csv,.tsv,.html,.htm,.xhtml,.xml,.txt,.s1,.json"></label>
+        <p class="panel-tools">单个文件 ≤25 MB。S-1 是资料类型，可导入其 HTML、PDF、TXT 和附件。旧版 DOC 请另存为 DOCX；扫描 PDF 需先 OCR。</p>
+        <div id="fileList" class="file-list" aria-live="polite"></div>
+        <label for="dealText">原文字符框</label><textarea id="dealText" spellcheck="false" autocomplete="off" placeholder="在此粘贴文章，或在上方导入文件。导入的文字仍可在这里补充、编辑。"></textarea>
+        <div class="input-meta"><span id="charCount">0 字符</span><span>关闭或刷新页面后清空本次内容</span></div>
+        <div class="source-view" id="sourceView"><span class="empty">开始后显示可点击的原文证据。</span></div>
+      </div>
+      <div class="footer-note">文件在本机提取文字。“开始审查”会使用本机已登录的 Codex 处理原文并联网检索；原文不上传到 GitHub。本机不保存导入文件或本次结果，导出由你选择。</div>
+    </section>
+    <section class="panel">
+      <div class="panel-head"><div><div class="panel-title">Journal Entry 候选工作底稿</div><div class="panel-tools">金额以百万为单位；保留原币种与原文证据</div></div></div>
+      <div class="body">
+        <label for="currencySelect">分录币种<select id="currencySelect"><option value="AUTO">按原文识别</option><option value="USD">USD · 美元</option><option value="CNY">CNY · 人民币</option><option value="AUD">AUD · 澳元</option><option value="HKD">HKD · 港币</option><option value="EUR">EUR · 欧元</option><option value="GBP">GBP · 英镑</option><option value="JPY">JPY · 日元</option><option value="SGD">SGD · 新加坡元</option></select></label>
+        <p class="panel-tools">所选币种补充原文未注明的币种。已明确的币种保留；不自动换汇。</p>
+        <div class="summary-grid"><div class="metric"><label>提取金额项</label><strong id="metricAmounts">0</strong></div><div class="metric"><label>分录候选</label><strong id="metricEntries">0</strong></div><div class="metric"><label>审阅发现</label><strong id="metricFindings">0</strong></div><div class="metric"><label>状态</label><strong id="metricStatus">待输入</strong></div></div>
+        <table aria-label="Journal entries"><thead><tr><th>Account / 说明</th><th>DR</th><th>CR</th><th>引用</th></tr></thead><tbody id="entryRows"><tr><td colspan="4" class="empty">点击“开始审查”后显示候选科目。</td></tr></tbody></table>
+        <p class="panel-tools">候选科目不代表完整或已过账分录；确认时点、账簿层次、借贷对方和计量依据需复核。</p>
+        <h2 class="small-title">即时文字与数字检查</h2><div id="localChecks" class="rule-list"><p class="empty">等待开始。</p></div>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="panel-head"><div><div class="panel-title">合规与法规对比</div><div class="panel-tools">会计 · 证券 · 审计；按主体及期间判断适用性</div></div></div>
+      <div class="body">
+        <div class="control-grid"><label>地区<select id="regionSelect"><option value="CN">中国大陆</option><option value="AU">澳洲</option><option value="HK">香港</option><option value="US" selected>美国</option><option value="EU">欧盟</option></select></label><label>报告期 / 交易日期<input id="reportingPeriod" autocomplete="off" placeholder="例如 FY2025 / 2026-09-30"></label></div>
+        <div id="regionSummary" class="region-summary"></div>
+        <details class="source-catalog"><summary>本地区官方来源</summary><div id="sourceCatalog"></div></details>
+        <div class="tabs" role="group" aria-label="审查类别"><button class="active" data-category="all">全部</button><button data-category="accounting">会计</button><button data-category="securities">证券</button><button data-category="auditing">审计</button><button data-category="narrative">文字</button></div>
+        <div id="reviewSummary" class="review-summary" aria-live="polite"></div>
+        <div id="liveEvents" class="live-events" aria-live="polite"></div>
+        <div id="ruleList" class="rule-list"><p class="empty">点击开始后，文字审查与官方法规检索同时启动。联网过程与读取失败都会在这里显示。</p></div>
+        <details id="retrievedSection" hidden><summary>本次读取的来源与版本</summary><div id="retrievedSources"></div></details>
+        <div id="limitations" class="limitations"></div>
+      </div>
+    </section>
+  </main>
+</div>
+</body>
+</html>

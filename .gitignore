@@ -1,0 +1,7 @@
+work/runtime/
+work/browser-check/
+**/__pycache__/
+*.pyc
+**/.runtime/
+.env
+.env.*

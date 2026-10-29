@@ -1,0 +1,880 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>M&A Journal Entry Compliance Workspace</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --ink: #18202b;
+      --muted: #667085;
+      --line: #d8dee8;
+      --blue: #1463ff;
+      --green: #11875d;
+      --red: #c43d3d;
+      --amber: #b7791f;
+      --violet: #6554c0;
+      --soft-blue: #eaf1ff;
+      --soft-green: #eaf8f2;
+      --soft-red: #fff0ef;
+      --soft-amber: #fff7e6;
+      --shadow: 0 18px 42px rgba(16, 24, 40, .08);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    button, textarea, input, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    header {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.9);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 7px;
+      background: #18202b;
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .icon-btn, .pill, .primary {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 7px;
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      box-shadow: 0 1px 0 rgba(16,24,40,.03);
+    }
+
+    .icon-btn {
+      width: 38px;
+      padding: 0;
+      justify-content: center;
+    }
+
+    .primary {
+      border-color: #0f56d9;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(320px, .9fr) minmax(440px, 1.2fr) minmax(360px, 1fr);
+      gap: 14px;
+      padding: 14px;
+      min-height: 0;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      min-height: 0;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .panel-head {
+      min-height: 52px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .panel-tools {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .body {
+      padding: 14px;
+      overflow: auto;
+      min-height: 0;
+      flex: 1;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 190px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      color: var(--ink);
+      line-height: 1.55;
+      outline: none;
+    }
+
+    textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(20, 99, 255, .12); }
+
+    .source-view {
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      min-height: 210px;
+      padding: 12px;
+      line-height: 1.72;
+      background: #fbfcff;
+      font-size: 14px;
+    }
+
+    .source-seg {
+      border-radius: 4px;
+      padding: 1px 2px;
+      transition: background .16s ease, outline .16s ease;
+    }
+
+    .source-seg.is-active { background: var(--soft-blue); outline: 2px solid rgba(20, 99, 255, .25); }
+    .source-seg.is-compliant { background: var(--soft-green); }
+    .source-seg.is-risk { background: var(--soft-red); }
+    .source-seg.is-question { background: var(--soft-amber); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      min-height: 74px;
+      background: #fff;
+    }
+
+    .metric label {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 13px;
+    }
+
+    th {
+      text-align: left;
+      color: var(--muted);
+      font-weight: 700;
+      border-bottom: 1px solid var(--line);
+      padding: 9px 8px;
+      background: #fbfcff;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    td {
+      border-bottom: 1px solid #edf1f6;
+      padding: 10px 8px;
+      vertical-align: top;
+    }
+
+    tr { transition: background .14s ease; }
+    tr:hover, tr.is-selected { background: var(--soft-blue); }
+
+    .amount {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .tag.ok { color: var(--green); background: var(--soft-green); }
+    .tag.bad { color: var(--red); background: var(--soft-red); }
+    .tag.ask { color: var(--amber); background: var(--soft-amber); }
+    .tag.info { color: var(--violet); background: #f0edff; }
+
+    .tabs {
+      display: inline-flex;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .tabs button {
+      border: 0;
+      background: transparent;
+      min-height: 31px;
+      padding: 0 10px;
+      color: var(--muted);
+    }
+
+    .tabs button.active {
+      color: var(--ink);
+      background: #edf3ff;
+      font-weight: 800;
+    }
+
+    .rule-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .rule {
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--blue);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .rule.bad { border-left-color: var(--red); }
+    .rule.ok { border-left-color: var(--green); }
+    .rule.ask { border-left-color: var(--amber); }
+
+    .rule-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .rule h3 {
+      font-size: 13px;
+      margin: 0;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    .rule p {
+      margin: 0;
+      color: #344054;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .rule a {
+      display: inline-flex;
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 700;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+
+    .connector-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .connector {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 9px;
+      min-height: 78px;
+      background: #fbfcff;
+    }
+
+    .connector strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .connector span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      display: block;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--amber);
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      border-top: 1px solid var(--line);
+      padding: 10px 14px;
+      background: #fbfcff;
+    }
+
+    .split {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      user-select: none;
+    }
+
+    .switch input { accent-color: var(--blue); }
+
+    @media (max-width: 1180px) {
+      .workspace { grid-template-columns: 1fr; }
+      .panel { min-height: 440px; }
+      header { align-items: flex-start; height: auto; padding: 12px 14px; flex-direction: column; }
+      .toolbar { justify-content: flex-start; }
+    }
+
+    @media (max-width: 680px) {
+      .workspace { padding: 8px; }
+      .summary-grid, .connector-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .body { overflow-x: auto; }
+      table { min-width: 560px; }
+      .panel { min-width: 0; }
+      .panel-head { flex-wrap: wrap; }
+      .panel-tools { overflow-wrap: anywhere; }
+      .brand { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="mark">M&A</div>
+        <div>
+          <h1>交易分录与法规审阅工作台</h1>
+          <div class="sub">离线提取分录候选，逐行对照原文；正式法规判断由 Skill 联网核查</div>
+        </div>
+      </div>
+      <div class="toolbar">
+        <button class="icon-btn" id="playBtn" title="暂停/恢复实时分析" aria-label="暂停/恢复实时分析">▶</button>
+        <button class="icon-btn" id="clearBtn" title="清空输入" aria-label="清空输入">×</button>
+        <button class="pill" id="sampleBtn">载入样例</button>
+        <button class="primary" id="exportBtn">导出审阅包</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">交易文本</div>
+            <div class="panel-tools">输入或粘贴 SPA、board paper、management memo 摘要</div>
+          </div>
+        </div>
+        <div class="body">
+          <label for="dealText">交易原文</label>
+          <textarea id="dealText" spellcheck="false"></textarea>
+          <div class="source-view" id="sourceView"></div>
+        </div>
+        <div class="footer-note">点击中间的分录行或右侧规则卡片，会在这里高亮对应原文证据。当前版本为前端原型，规则判断需接入正式授权数据库和专业复核流程。</div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Journal Entry 候选工作底稿</div>
+            <div class="panel-tools">逐行引用；尚未核查主体、交割日期及适用条文</div>
+          </div>
+          <label class="switch"><input type="checkbox" id="showOnlyIssues"> 只看风险</label>
+        </div>
+        <div class="body">
+          <div class="summary-grid">
+            <div class="metric"><label>Purchase consideration</label><strong id="metricPrice">-</strong></div>
+            <div class="metric"><label>Goodwill / gain</label><strong id="metricGoodwill">-</strong></div>
+            <div class="metric"><label>Compliance flags</label><strong id="metricFlags">0</strong></div>
+            <div class="metric"><label>核查状态</label><strong id="metricConfidence">待核查</strong></div>
+          </div>
+          <table aria-label="Journal entries">
+            <thead>
+              <tr>
+                <th>Account</th>
+                <th>DR</th>
+                <th>CR</th>
+                <th>引用</th>
+                <th>状态</th>
+              </tr>
+            </thead>
+            <tbody id="entryRows"></tbody>
+          </table>
+          <p class="panel-tools">候选科目尚未形成完整分录；金额以百万为单位。每项币种和确认时点需另行核查。</p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">法规窗口</div>
+            <div class="panel-tools">合规 / 不合规 / 存疑同步标记</div>
+          </div>
+          <div class="tabs" role="tablist">
+            <button class="active" data-tab="all">全部</button>
+            <button data-tab="bad">冲突</button>
+            <button data-tab="ask">存疑</button>
+            <button data-tab="ok">有依据</button>
+          </div>
+        </div>
+        <div class="body">
+          <div class="connector-grid">
+            <div class="connector"><strong><span class="status-dot"></span>IFRS</strong><span>官方入口 · 此页面未联网核查</span></div>
+            <div class="connector"><strong><span class="status-dot"></span>AASB</strong><span>官方入口 · 此页面未联网核查</span></div>
+            <div class="connector"><strong><span class="status-dot"></span>ACCC</strong><span>官方入口 · 此页面未联网核查</span></div>
+          </div>
+          <div class="rule-list" id="ruleList"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const officialSources = {
+      ifrs: "https://www.ifrs.org/issued-standards/list-of-standards/",
+      aasb: "https://standards.aasb.gov.au/accounting-standards",
+      accc: "https://www.accc.gov.au/business/mergers-and-acquisitions"
+    };
+
+    const sampleText = `Acquirer Pty Ltd signed a binding share purchase agreement to acquire 80% of Target Co on 30 June 2026 for AUD 120 million cash and AUD 15 million contingent consideration payable if FY27 EBITDA exceeds AUD 18 million. Target had identifiable net assets at fair value of AUD 92 million, including customer relationships of AUD 18 million and brand intangible assets of AUD 7 million. The board paper says integration synergies of AUD 22 million should be capitalised as part of the acquisition assets.
+
+The transaction will give Acquirer approximately 42% share in the South Australian specialist equipment leasing market. The memo says no ACCC notification is planned because the deal is commercially confidential. Management intends to expense transaction advisory fees of AUD 3.2 million. Non-controlling interest will be measured at proportionate share of identifiable net assets.`;
+
+    const textEl = document.getElementById("dealText");
+    const sourceView = document.getElementById("sourceView");
+    const entryRows = document.getElementById("entryRows");
+    const ruleList = document.getElementById("ruleList");
+    const showOnlyIssues = document.getElementById("showOnlyIssues");
+    const playBtn = document.getElementById("playBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const sampleBtn = document.getElementById("sampleBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const tabs = [...document.querySelectorAll(".tabs button")];
+    let running = true;
+    let currentTab = "all";
+    let selectedCitation = null;
+
+    function money(value, currency = "UNKNOWN") {
+      if (!Number.isFinite(value)) return "-";
+      return (currency === "UNKNOWN" ? "币种未定" : currency) + " " + value.toLocaleString("en-AU", { maximumFractionDigits: 6 }) + "m";
+    }
+
+    function findMoneyNear(text, keywords) {
+      const lower = text.toLowerCase();
+      const candidates = [...text.matchAll(/(?:(aud|usd|us\$|a\$|\$)\s*)?([0-9]+(?:,[0-9]{3})*(?:\.[0-9]+)?)\s*(billion|million|bn|m)?\b/gi)]
+        .filter(match => {
+          const token = match[0].trim();
+          return match[1] || match[3] || /\$/.test(token);
+        });
+      const matches = [];
+      for (const match of candidates) {
+        if (/^\s*(?:per\b[^.;,\n]{0,35}\bshare|\/\s*share)/i.test(text.slice(match.index + match[0].length))) continue;
+        for (const keyword of keywords) {
+          let anchor = lower.indexOf(keyword.toLowerCase());
+          while (anchor >= 0) {
+            const anchorEnd = anchor + keyword.length;
+            const amountEnd = match.index + match[0].length;
+            const gap = match.index >= anchorEnd ? text.slice(anchorEnd, match.index)
+              : amountEnd <= anchor ? text.slice(amountEnd, anchor) : null;
+            if (gap !== null && gap.length <= 30 && /^(?:\s|[:,\-]|\b(?:of|was|were|is|at|in|the|cash|and|approximately|about|total|estimated)\b)*$/i.test(gap)) {
+              const currency = /^(?:aud|a\$)$/i.test(match[1] || "") ? "AUD"
+                : /^(?:usd|us\$)$/i.test(match[1] || "") ? "USD" : "UNKNOWN";
+              const unit = (match[3] || "").toLowerCase();
+              const multiplier = unit.startsWith("b") ? 1000 : unit ? 1 : 0.000001;
+              matches.push({ value: Number(match[2].replace(/,/g, "")) * multiplier, index: match.index, text: match[0].trimEnd(), currency, distance: gap.length });
+            }
+            anchor = lower.indexOf(keyword.toLowerCase(), anchor + keyword.length);
+          }
+        }
+      }
+      if (!matches.length) return null;
+      return matches.sort((a, b) => a.distance - b.distance || a.index - b.index)[0];
+    }
+
+    function locate(text, patterns, fallbackStart = 0) {
+      const lower = text.toLowerCase();
+      for (const pattern of patterns) {
+        const idx = lower.indexOf(pattern.toLowerCase());
+        if (idx >= 0) return { start: idx, end: Math.min(text.length, idx + pattern.length) };
+      }
+      return null;
+    }
+
+    function analyze(text) {
+      const price = findMoneyNear(text, ["equity value", "purchase price", "cash consideration", "for"]);
+      const contingent = findMoneyNear(text, ["contingent consideration"]);
+      const netAssets = findMoneyNear(text, ["net assets at fair value", "net assets"]);
+      const fees = findMoneyNear(text, ["transaction advisory fees", "advisory fees"]);
+      const terminationFee = findMoneyNear(text, ["termination fee"]);
+      const debtSenior = findMoneyNear(text, ["senior notes"]);
+      const debtBridge = findMoneyNear(text, ["borrowings from a bridge facility"]);
+      const tickingFee = /ticking fee/i.test(text);
+      const synergies = /(?:integration\s+)?synergies/i.test(text);
+      const marketShare = [...text.matchAll(/([0-9]+(?:\.[0-9]+)?)%\s*share/gi)][0];
+      const ownership = [...text.matchAll(/acquire\s+([0-9]+(?:\.[0-9]+)?)%/gi)][0];
+      const nciProportionate = /proportionate share/i.test(text);
+      const noNotification = /no\s+ACCC\s+notification|no\s+notification/i.test(text);
+      const assumeDebt = /assume\s+[^.]{0,40}net debt|assume\s+wbd.?s\s+net debt/i.test(text);
+      const publicCompanyMerger = /outstanding shares|per\s+\w+\s+share|stockholders|merger agreement/i.test(text);
+      const currency = price?.currency || terminationFee?.currency || debtSenior?.currency || "UNKNOWN";
+      const assumedDebt = debtSenior && debtBridge && debtSenior.currency !== "UNKNOWN" && debtSenior.currency === debtBridge.currency ? debtSenior.value + debtBridge.value : null;
+      const totalConsideration = price && (!contingent || (price.currency !== "UNKNOWN" && contingent.currency === price.currency)) ? price.value + (contingent?.value || 0) : null;
+      const ownershipPct = ownership ? Number(ownership[1]) / 100 : 1;
+      const identifiableShare = netAssets ? netAssets.value * ownershipPct : 0;
+      // The prototype has not verified acquisition date, fair values, NCI or book level.
+      const goodwill = NaN;
+
+      const citations = {
+        consideration: locate(text, ["$31.00 per WBD share", "equity value of $80.9 billion", "purchase agreement", "consideration"], price?.index || 0),
+        contingent: locate(text, ["AUD 15 million contingent consideration", "contingent consideration"], contingent?.index || 0),
+        netAssets: locate(text, ["identifiable net assets at fair value", "net assets"], netAssets?.index || 0),
+        nci: locate(text, ["Non-controlling interest will be measured", "proportionate share"], 0),
+        synergy: locate(text, ["integration synergies", "capitalised as part"], synergies?.index || 0),
+        accc: locate(text, ["no ACCC notification", "42% share", "commercially confidential"], marketShare?.index || 0),
+        fees: locate(text, ["transaction advisory fees", "expense transaction"], fees?.index || 0),
+        debt: locate(text, ["assume WBD’s net debt", "senior notes", "bridge facility"], debtSenior?.index || 0),
+        ticking: locate(text, ["ticking fee", "$0.00277778", "$0.25 per WBD share"], tickingFee?.index || 0),
+        termination: locate(text, ["termination fee of $2.8 billion", "paid a termination fee", "Netflix"], terminationFee?.index || 0),
+        funding: locate(text, ["$46.7 billion to be received", "Ellison Parties", "Subscription Agreements"], 0)
+      };
+
+      const amountCitations = { consideration: price, contingent, netAssets, fees, termination: terminationFee };
+      for (const [key, amount] of Object.entries(amountCitations)) {
+        if (amount) citations[key] = { start: amount.index, end: amount.index + amount.text.length };
+        else citations[key] = null;
+      }
+      if (debtSenior) citations.debt = { start: debtSenior.index, end: debtSenior.index + debtSenior.text.length };
+      if (debtBridge) citations.debtBridge = { start: debtBridge.index, end: debtBridge.index + debtBridge.text.length };
+
+      const entries = [];
+      if (netAssets) entries.push({ account: "Dr Identifiable net assets acquired", dr: netAssets.value, cr: null, citation: "netAssets", status: "ok", note: "Fair value basis detected" });
+      if (Number.isFinite(goodwill) && goodwill >= 0) entries.push({ account: "Dr Goodwill", dr: goodwill, cr: null, citation: "consideration", status: synergies ? "ask" : "ok", note: synergies ? "Goodwill may include unsupported synergy language" : "Calculated from consideration less acquirer's share of net assets" });
+      if (nciProportionate && netAssets && ownershipPct < 1) entries.push({ account: "Cr NCI at proportionate share (conditional)", dr: null, cr: netAssets.value * (1 - ownershipPct), citation: "nci", status: "ask", note: "按原文净资产及持股比例计算，净资产计量及政策适用性待证实" });
+      if (price) entries.push({ account: "Cr Cash consideration", dr: null, cr: price.value, citation: "consideration", status: "ok", note: "Cash consideration identified" });
+      if (contingent) entries.push({ account: "Cr Contingent consideration liability", dr: null, cr: contingent.value, citation: "contingent", status: "ask", note: "Fair value measurement and classification require support" });
+      if (fees) entries.push({ account: "Dr Transaction costs expense", dr: fees.value, cr: null, citation: "fees", status: "ok", note: "Expensing detected" });
+      if (!netAssets && price) entries.unshift({ account: "Memo: PPA / goodwill pending", dr: null, cr: null, citation: "consideration", status: "ask", note: "缺少 PPA、收购日期及计量依据；不生成商誉占位金额" });
+      if (debtSenior) entries.push({ account: "Memo: historical senior notes", dr: null, cr: null, citation: "debt", status: "ask", note: money(debtSenior.value, debtSenior.currency) + "；历史债务与收购日公允价值、再融资分别核查" });
+      if (debtBridge) entries.push({ account: "Memo: historical bridge borrowing", dr: null, cr: null, citation: "debtBridge", status: "ask", note: money(debtBridge.value, debtBridge.currency) + "；融资承诺不等于已收借款" });
+      if (tickingFee) entries.push({ account: "Memo: ticking fee consideration adjustment", dr: null, cr: null, citation: "ticking", status: "ask", note: "Per-share term detected; needs share count and closing date before JE amount can be calculated" });
+      if (terminationFee) entries.push({ account: "Dr Acquisition-related / settlement cost", dr: terminationFee.value, cr: null, citation: "termination", status: "ask", note: "Payment on behalf of target may affect consideration, expense, or settlement accounting depending on facts" });
+
+      const rules = [
+        {
+          id: "ifrs3-assets",
+          status: netAssets ? "ok" : "ask",
+          citation: "netAssets",
+          title: "IFRS 3 / AASB 3: identifiable assets and liabilities at acquisition-date fair value",
+          body: netAssets ? "原文出现 identifiable net assets at fair value，可支持初始 purchase price allocation 草稿。" : "未检测到 acquisition-date fair value 的可识别资产和负债依据。",
+          source: "IFRS issued standards",
+          url: officialSources.ifrs
+        },
+        {
+          id: "ifrs3-debt",
+          status: assumeDebt ? "ask" : "ok",
+          citation: "debt",
+          title: "IFRS 3 / AASB 3: assumed liabilities and acquisition-date measurement",
+          body: assumeDebt ? "检测到 assume net debt、senior notes 和 bridge facility。需要区分 acquisition-date assumed liabilities、公允价值计量、以及后续 refinancing 的融资现金流列报。" : "未检测到 assumed debt language。",
+          source: "AASB pronouncements",
+          url: officialSources.aasb
+        },
+        {
+          id: "ifrs3-termination",
+          status: terminationFee ? "ask" : "ok",
+          citation: "termination",
+          title: "IFRS 3 / AASB 3: termination fee paid on behalf of acquiree",
+          body: terminationFee ? "检测到为 WBD 支付给 Netflix 的 termination fee。需要判断是否属于 transferred consideration、separate transaction、pre-existing relationship settlement 或 acquisition-related cost。" : "未检测到 target prior deal termination fee。",
+          source: "IFRS issued standards",
+          url: officialSources.ifrs
+        },
+        {
+          id: "ifrs3-ticking",
+          status: tickingFee ? "ask" : "ok",
+          citation: "ticking",
+          title: "IFRS 3 / AASB 3: ticking fee and variable purchase price mechanics",
+          body: tickingFee ? "检测到按天累计的 ticking fee。需要 closing date、股数、cap 条款和是否视为 consideration adjustment 的会计备忘录。" : "未检测到 ticking fee。",
+          source: "IFRS issued standards",
+          url: officialSources.ifrs
+        },
+        {
+          id: "ifrs3-synergy",
+          status: synergies ? "bad" : "ok",
+          citation: "synergy",
+          title: "IFRS 3 / AASB 3: synergies normally support goodwill, not separately recognised assets",
+          body: synergies ? "原文称 integration synergies should be capitalised as acquisition assets。该表述需要改为 goodwill 支撑或删除，除非存在可识别、可分离或合同性资产。" : "未发现把 integration synergy 直接资本化为独立资产的表述。",
+          source: "AASB pronouncements",
+          url: officialSources.aasb
+        },
+        {
+          id: "ifrs3-contingent",
+          status: contingent ? "ask" : "ok",
+          citation: "contingent",
+          title: "IFRS 3 / AASB 3: contingent consideration at fair value",
+          body: contingent ? "检测到 contingent consideration。需要估值模型、概率权重、后续计量分类和披露证据。" : "未检测到或有对价。",
+          source: "IFRS issued standards",
+          url: officialSources.ifrs
+        },
+        {
+          id: "accc-merger",
+          status: noNotification || (marketShare && Number(marketShare[1]) >= 40) ? "bad" : "ask",
+          citation: "accc",
+          title: "ACCC merger review: competition and notification risk",
+          body: marketShare ? `检测到 ${marketShare[1]}% market share，并出现 notification 相关表述。需要按 ACCC merger regime 做市场定义、竞争影响、threshold 和 filing 策略复核。` : publicCompanyMerger ? "检测到大型 public-company merger，但未检测到澳大利亚市场份额、local nexus 或 notification strategy；ACCC 窗口标为存疑。" : "未检测到市场份额或竞争影响信息，无法完成 ACCC 风险判断。",
+          source: "ACCC mergers",
+          url: officialSources.accc
+        }
+      ];
+
+      for (const entry of entries) {
+        entry.status = "ask";
+        entry.currency = amountCitations[entry.citation]?.currency || currency;
+        entry.note += "（候选草稿；确认时点、借贷对方及账簿层次待核查）";
+      }
+      // Keyword extraction cannot establish legal or accounting compliance.
+      for (const rule of rules) {
+        rule.status = "ask";
+        rule.body = "离线提示，尚未核对适用条文。" + rule.body;
+      }
+      const acccRule = rules.find(rule => rule.id === "accc-merger");
+      acccRule.body = "需按交易日期核对澳大利亚联系、营业额、交易金额、累计收购及豁免；市场份额或保密措辞本身不能证明通知义务或违法。";
+      return { price, contingent, netAssets, totalConsideration, goodwill, entries, rules, citations, currency };
+    }
+
+    function renderSource(text, citations, selected) {
+      if (!text.trim()) {
+        sourceView.innerHTML = "<span style='color:#667085'>原文引用高亮区会在这里显示。</span>";
+        return;
+      }
+      const ranges = Object.entries(citations).filter(([, r]) => r && r.end > r.start);
+      const boundaries = [...new Set([0, text.length, ...ranges.flatMap(([, r]) => [r.start, r.end])])].sort((a, b) => a - b);
+      let html = "";
+      for (let i = 0; i < boundaries.length - 1; i++) {
+        const start = boundaries[i], end = boundaries[i + 1];
+        const covering = ranges.filter(([, r]) => r.start <= start && r.end >= end);
+        const chosen = covering.find(([key]) => key === selected) || covering[0];
+        const escaped = escapeHtml(text.slice(start, end));
+        if (!chosen) { html += escaped; continue; }
+        const key = chosen[0];
+        const active = key === selected ? " is-active" : "";
+        html += `<span class="source-seg${active}" data-citation="${key}">${escaped}</span>`;
+      }
+      sourceView.innerHTML = html.replace(/\n/g, "<br>");
+    }
+
+    function escapeHtml(s) {
+      return s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[c]));
+    }
+
+    function statusTag(status) {
+      if (status === "ok") return '<span class="tag ok">有依据支持</span>';
+      if (status === "bad") return '<span class="tag bad">冲突</span>';
+      return '<span class="tag ask">存疑</span>';
+    }
+
+    function renderEntries(model) {
+      const rows = showOnlyIssues.checked ? model.entries.filter(e => e.status !== "ok") : model.entries;
+      entryRows.innerHTML = rows.map((entry, index) => `
+        <tr data-citation="${entry.citation}" class="${selectedCitation === entry.citation ? "is-selected" : ""}">
+          <td><strong>${escapeHtml(entry.account)}</strong><br><span style="color:#667085">${escapeHtml(entry.note)}</span></td>
+          <td class="amount">${entry.dr !== null ? money(entry.dr, entry.currency) : ""}</td>
+          <td class="amount">${entry.cr !== null ? money(entry.cr, entry.currency) : ""}</td>
+          <td>${model.citations[entry.citation] ? `<button class="pill" data-citation="${entry.citation}">原文</button>` : "缺少证据"}</td>
+          <td>${statusTag(entry.status)}</td>
+        </tr>
+      `).join("") || `<tr><td colspan="5" style="color:#667085">等待可识别金额和交易事实。</td></tr>`;
+    }
+
+    function renderRules(model) {
+      const filtered = currentTab === "all" ? model.rules : model.rules.filter(rule => rule.status === currentTab);
+      ruleList.innerHTML = filtered.map(rule => `
+        <article class="rule ${rule.status}" data-citation="${rule.citation}">
+          <div class="rule-top">
+            <h3>${escapeHtml(rule.title)}</h3>
+            ${statusTag(rule.status)}
+          </div>
+          <p>${escapeHtml(rule.body)}</p>
+          <a href="${rule.url}" target="_blank" rel="noreferrer">${escapeHtml(rule.source)}</a>
+        </article>
+      `).join("") || `<div style="color:#667085;font-size:13px">当前筛选下没有规则项。</div>`;
+    }
+
+    function renderMetrics(model) {
+      document.getElementById("metricPrice").textContent = model.totalConsideration ? money(model.totalConsideration, model.currency) : "-";
+      document.getElementById("metricGoodwill").textContent = Number.isFinite(model.goodwill) ? money(model.goodwill, model.currency) : "-";
+      document.getElementById("metricFlags").textContent = model.rules.filter(r => r.status !== "ok").length;
+      document.getElementById("metricConfidence").textContent = model.entries.length ? "待核查" : "待输入";
+    }
+
+    function refresh() {
+      const model = analyze(textEl.value);
+      if (!model.citations[selectedCitation]) selectedCitation = Object.keys(model.citations)[0] || null;
+      renderSource(textEl.value, model.citations, selectedCitation);
+      renderMetrics(model);
+      renderEntries(model);
+      renderRules(model);
+      return model;
+    }
+
+    function scheduleRefresh() {
+      if (running) refresh();
+    }
+
+    textEl.addEventListener("input", scheduleRefresh);
+    showOnlyIssues.addEventListener("change", refresh);
+    sampleBtn.addEventListener("click", () => { textEl.value = sampleText; selectedCitation = "consideration"; refresh(); });
+    clearBtn.addEventListener("click", () => { textEl.value = ""; selectedCitation = null; refresh(); });
+    playBtn.addEventListener("click", () => {
+      running = !running;
+      playBtn.textContent = running ? "▶" : "Ⅱ";
+      if (running) refresh();
+    });
+
+    tabs.forEach(tab => tab.addEventListener("click", () => {
+      tabs.forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      currentTab = tab.dataset.tab;
+      refresh();
+    }));
+
+    document.addEventListener("click", event => {
+      const target = event.target.closest("[data-citation]");
+      if (!target) return;
+      selectedCitation = target.dataset.citation;
+      refresh();
+      sourceView.querySelector(".is-active")?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    });
+
+    exportBtn.addEventListener("click", () => {
+      const model = analyze(textEl.value);
+      const payload = {
+        schemaVersion: 1,
+        createdAt: new Date().toISOString(),
+        sourceText: textEl.value,
+        citations: Object.fromEntries(Object.entries(model.citations).map(([key, range]) => [key, range ? { ...range, quote: textEl.value.slice(range.start, range.end) } : null])),
+        sourceOffsetUnit: "UTF-16 code units; end exclusive",
+        amountUnit: "million",
+        ledgerState: "unposted-incomplete-candidates",
+        regulatoryRetrieval: "not-performed-by-offline-ui",
+        entries: model.entries,
+        rules: model.rules,
+        officialSources
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "ma-journal-review-package.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    textEl.value = sampleText;
+    refresh();
+  </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+interface:
+  display_name: "FINSKILL 财务分析工作台"
+  short_description: "多地区公示文件导入、官方会计证券审计核查、日记账草稿及财报编制工作流"
+  default_prompt: "使用 $financial-workbench 按我选择的地区分析资料，联动原文证据、日记账及会计、证券和审计规则核查。"
